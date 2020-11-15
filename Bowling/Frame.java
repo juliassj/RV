@@ -6,7 +6,7 @@ public class Frame {
 	}
 	
 	public boolean isStrike() {
-		return this.rolls[0] == 10 && this.rolls[1] == 0;
+		return this.rolls[0] == 10;
 	}
 	
 	public boolean isSpare() {
@@ -29,6 +29,10 @@ public class Frame {
 	
 	public void updateBothRolls(int[] rolls) {
 		this.rolls = rolls;
+	}
+	
+	public void displayFrameRolls() {
+		System.out.println("Rolls: " + getFirstRoll() + ", " + getSecondRoll());
 	}
 	
 }

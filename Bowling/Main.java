@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * 
  */
@@ -12,12 +14,35 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int[] testRolls = new int[]{1,2,3,4,8,2,5,4,0,10, 1,6,8,1,5,5,4,3,1,9};
 		BowlingGame game = new BowlingGame();
-		for (int i = 0; i < testRolls.length; i++) {
-			game.rollBall(testRolls[i]);
-		}
-		
+		Random r = new Random();
+		game.rollBall(4);
+		game.rollBall(3);
+		game.rollBall(5);
+		game.rollBall(3);
+		game.rollBall(9);
+		game.rollBall(1);
+		game.rollBall(3);
+		game.rollBall(6);
+		game.rollBall(10);
+		game.rollBall(6);
+		game.rollBall(2);
+		game.rollBall(10);
+		game.rollBall(10);
+		game.rollBall(8);
+		game.rollBall(1);
+		game.rollBall(5);
+		game.rollBall(5);
+		game.rollBall(10);
+//		while(game.getStatus() != Status.GAME_OVER) {
+//			game.rollBall(r.nextInt(11));
+//		}
 	}
+	
+}
 
+enum Status {
+	GAME_OVER,
+	IN_PROGRESS,
+	BONUS
 }
