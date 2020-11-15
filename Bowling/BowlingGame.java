@@ -86,14 +86,33 @@ public class BowlingGame {
 		}
 		return score;
 	}
-
+	
 	public void displayScore() {
 		int currentFrameNum = this.getCurrentFrameNum();
+		String str = "";
 		for (int i = 0; i <= currentFrameNum; i++) {
-			System.out.println("Frame: " + i + " Rolls: " + this.frames.get(i).getFirstRoll() + ", "
-					+ this.frames.get(i).getSecondRoll() + " Frame score: " + getFrameScore(i));
+				str += "[ ";
+				Frame frame = getFrame(i);
+				int frameScore = getFrameScore(i);
+				int cumulativeScore = frameScore;
+				for ( int j = (i-1); j >=0; j--) {
+					cumulativeScore += getFrameScore(j);
+				}
+				if (frame.isStrike()) {
+					str+= frameScore + "|" + cumulativeScore + "(*)";
+					
+				} else if (frame.isSpare()) {
+					str+= frameScore + "|" + cumulativeScore + "(/)";
+				} else if ( i!= 0) {
+					str += cumulativeScore + "("+ frameScore +")";
+					
+				}else {
+					str += frameScore;
+				}
+				str += " ]";
+
 		}
-		System.out.println("Total score: " + getScore());
+		System.out.println(str);
 	}
 
 }
