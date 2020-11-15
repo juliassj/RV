@@ -1,10 +1,8 @@
 public class Frame {
-	int[] rolls;
-	boolean[] hasRolled;
+	private int[] rolls;
 	
 	public Frame() {
 		this.rolls = new int[] {0, 0};
-		this.hasRolled = new boolean[] {false, false};
 	}
 	
 	public boolean isStrike() {
@@ -27,12 +25,10 @@ public class Frame {
 	
 	public void updateOneRoll(int pins, int index) {
 		this.rolls[index] = pins;
-		this.hasRolled[index] = true;
 	}
 	
 	public void updateBothRolls(int[] rolls) {
 		this.rolls = rolls;
-		this.hasRolled = new boolean[] {true, true};
 	}
 	
 }
