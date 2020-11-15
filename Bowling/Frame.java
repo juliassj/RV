@@ -2,7 +2,7 @@ public class Frame {
 	private int[] rolls;
 	
 	public Frame() {
-		this.rolls = new int[] {0, 0};
+		this.rolls = new int[2];
 	}
 	
 	public boolean isStrike() {

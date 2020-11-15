@@ -20,14 +20,14 @@ public class BowlingGame {
 	public int getScore() {
 		int score = 0;
 		int currentFrameNum = getCurrentFrameNum();
-		
-		//Total score is simply the sum of all the frame scores up to this point
+
+		// Total score is simply the sum of all the frame scores up to this point
 		for (int i = 0; i <= currentFrameNum; i++) {
 			score += getFrameScore(i);
 		}
 		return score;
 	}
-	
+
 	public Frame getFrame(int frameNum) {
 		return this.frames.get(frameNum);
 	}
@@ -44,22 +44,22 @@ public class BowlingGame {
 		Frame frame = this.frames.get(frameNum);
 		// Base score just the sum of the rolls
 		int score = frame.getFirstRoll() + frame.getSecondRoll();
-		
+
 		// Check if any frame except the last one needs a spare or strike bonus
 		if (frameNum < 9) {
 			Frame nextFrame = this.frames.get(frameNum + 1);
 			if (frame.isSpare()) {
 				score += nextFrame.getFirstRoll();
 			} else if (frame.isStrike()) {
-				// If there's a double strike, the 2nd bonus roll comes from the next, next frame
+				// If a double strike, the 2nd bonus roll comes from the next, next frame
 				if (nextFrame.isStrike() && frameNum < 8) {
 					score += nextFrame.getFirstRoll() + this.frames.get(frameNum + 2).getFirstRoll();
 				} else {
 					score += nextFrame.getFirstRoll() + nextFrame.getSecondRoll();
 				}
 			}
-		// the final frame gets the bonus if there is one
-		} else if(frameNum == 9) {
+			// the final frame gets the bonus if there is one
+		} else if (frameNum == 9) {
 			score += this.bonus;
 		}
 		return score;
@@ -73,7 +73,7 @@ public class BowlingGame {
 		return this.currentRoll;
 	}
 
-	public void updateGame(Frame currentFrame, int rollNum) {
+	public void updateGame(Frame currentFrame) {
 
 		if (currentRoll == 19
 				&& (currentFrame.isSpare() || currentFrame.isStrike() || currentFrame.getSecondRoll() == 10)) {
@@ -84,39 +84,36 @@ public class BowlingGame {
 			return;
 		}
 
-		if (rollNum == 1) {
+		if (currentRoll % 2 == 1) {
 			displayScore();
 		}
-		
+
 		currentRoll++;
 
-		
 	}
 
 	public void rollFoul() {
-		int rollNum = currentRoll % 2;
 		Frame currentFrame = getCurrentFrame();
 
-		updateGame(currentFrame, rollNum);
+		updateGame(currentFrame);
 	}
 
 	public void rollBall(int numPinsHit) {
 
 		if (this.status != Status.GAME_OVER) {
-			
+
 			// Check if number of pins is valid
 			if (numPinsHit < 0 || numPinsHit > 10) {
 				// throw new Exception("Number of pins must be between 0 and 10");
 				// Just return for now
 				return;
 			}
-			
-			
+
 			Frame currentFrame = getCurrentFrame();
-			
+
 			// Check if number of pins is less than number of pins remaining
-			if(currentRoll < 19 && currentRoll % 2 == 1 && numPinsHit > (10 - currentFrame.getFirstRoll())) {
-				// throw new Exception("Number of pins cannot be more than number of pins remaining");
+			if (currentRoll < 19 && currentRoll % 2 == 1 && numPinsHit > (10 - currentFrame.getFirstRoll())) {
+				// throw new Exception("# of pins cannot be more than # of pins remaining");
 				// Just return for now
 				return;
 			}
@@ -128,18 +125,17 @@ public class BowlingGame {
 				if (numPinsHit == 10 && currentRoll % 2 == 0 && getCurrentFrameNum() != 9) {
 					int[] strikeRolls = { 10, 0 };
 					currentFrame.updateBothRolls(strikeRolls);
-					// If it's a strike, there's no 2nd roll
+					// If it's a strike, there's no 2nd roll, so advance counter
 					currentRoll++;
 				} else {
 					currentFrame.updateOneRoll(numPinsHit, currentRoll % 2);
 				}
 			}
-			updateGame(currentFrame, currentRoll % 2);
+
+			updateGame(currentFrame);
 		}
 
 	}
-
-	
 
 	public void displayScore() {
 		int currentFrameNum = this.getCurrentFrameNum();
@@ -152,7 +148,7 @@ public class BowlingGame {
 			for (int j = (i - 1); j >= 0; j--) {
 				cumulativeScore += getFrameScore(j);
 			}
-			if (frame.isStrike() || (i == 9 && (frame.getSecondRoll() == 10 || bonus == 10)))  {
+			if (frame.isStrike() || (i == 9 && (frame.getSecondRoll() == 10 || bonus == 10))) {
 				str += frameScore + "|" + cumulativeScore + "(X)";
 
 			} else if (frame.isSpare()) {
@@ -164,14 +160,14 @@ public class BowlingGame {
 				str += frameScore;
 			}
 			str += " ]";
-			
+
 		}
 		System.out.println(str);
 	}
-	
+
 	public void displayFinalScore() {
 		displayScore();
-		System.out.println( "Final score: " + getScore());
+		System.out.println("Final score: " + getScore());
 	}
 
 }
