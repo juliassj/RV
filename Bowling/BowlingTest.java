@@ -51,9 +51,8 @@ class BowlingTest {
 	@Test
 	void canHitMorePinsIfFinalFrame() {
 		// Roll 4s for 9 frames
-		for (int i = 0; i < 18; i++) {
-			game.rollBall(4);
-		}
+		rollMultiple(18, 4);
+
 		int currentRoll = game.getCurrentRoll();
 		int currentScore = game.getScore();
 
@@ -194,10 +193,8 @@ class BowlingTest {
 
 	@Test
 	void canRollFoulOnBonusBall() {
-		for (int i = 0; i < NUM_ROLLS; i++) {
-			game.rollBall(5);
-		}
-
+		rollFullGame(5);
+		
 		int currentScore = game.getScore();
 		assertEquals(Status.BONUS, game.getStatus());
 
@@ -242,9 +239,8 @@ class BowlingTest {
 	// If the player gets a bonus roll, game should end after 21st roll
 	@Test
 	void canRollBonusIfSpare() {
-		for (int i = 0; i < NUM_ROLLS - 2; i++) {
-			game.rollBall(4);
-		}
+		rollMultiple(NUM_ROLLS - 2, 4);
+
 		game.rollBall(5);
 		game.rollBall(5);
 
@@ -258,9 +254,8 @@ class BowlingTest {
 
 	@Test
 	void canRollBonusIfStrikeOnFirstRoll() {
-		for (int i = 0; i < NUM_ROLLS - 2; i++) {
-			game.rollBall(4);
-		}
+		rollMultiple(NUM_ROLLS - 2, 4);
+
 		game.rollBall(10);
 
 		assertEquals(Status.IN_PROGRESS, game.getStatus());
@@ -277,9 +272,8 @@ class BowlingTest {
 
 	@Test
 	void canRollBonusIfStrikeOnSecondRoll() {
-		for (int i = 0; i < NUM_ROLLS - 2; i++) {
-			game.rollBall(4);
-		}
+		rollMultiple(NUM_ROLLS - 2, 4);
+
 		game.rollBall(5);
 		game.rollBall(10);
 
@@ -294,9 +288,7 @@ class BowlingTest {
 	// Test hitting 10 pins on each roll of last frame
 	@Test
 	void canRollTripleStrikeOnLastFrame() {
-		for (int i = 0; i < NUM_ROLLS - 2; i++) {
-			game.rollBall(4);
-		}
+		rollMultiple(NUM_ROLLS - 2, 4);
 
 		int currentScore = game.getScore();
 
@@ -345,9 +337,7 @@ class BowlingTest {
 	@Test
 	void testPerfectGame() {
 		// Should be able to roll 12 strikes (10 regular and 2 bonus)
-		for (int i = 0; i < 12; i++) {
-			game.rollBall(10);
-		}
+		rollMultiple(12, 10);
 
 		assertTrue(game.getStatus() == Status.GAME_OVER);
 		assertEquals(300, game.getScore());
@@ -355,9 +345,7 @@ class BowlingTest {
 
 	@Test
 	void canRollAllSpares() {
-		for (int i = 0; i < NUM_ROLLS; i++) {
-			game.rollBall(5);
-		}
+		rollFullGame(5);
 		assertEquals(Status.BONUS, game.getStatus());
 
 		game.rollBall(5);
@@ -368,14 +356,18 @@ class BowlingTest {
 	// Make sure the final frame has the bonus roll included in score
 	@Test
 	void testFinalFrameScoreWithBonus() {
-		for (int i = 0; i < NUM_ROLLS; i++) {
-			game.rollBall(5);
-		}
+		rollFullGame(5);
 		assertEquals(10, game.getFrameScore(9));
 
 		game.rollBall(4);
 
 		assertEquals(14, game.getFrameScore(9));
+	}
+	
+	void rollMultiple(int numRolls, int numPins) {
+		for (int i = 0; i < numRolls; i++) {
+			game.rollBall(numPins);
+		}
 	}
 
 	void rollFullGame(int pins) {
