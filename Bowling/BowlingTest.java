@@ -26,17 +26,42 @@ class BowlingTest {
 	@Test
 	void cannotRollNegativePins() {
 		game.rollBall(-5);
+		assertEquals(0, game.getScore());
+		assertEquals(0, game.getCurrentRoll());
 	}
 	
 	@Test
 	void cannotRollMoreThanTen() {
 		game.rollBall(11);
+		assertEquals(0, game.getScore());
+		assertEquals(0, game.getCurrentRoll());
 	}
 	
 	@Test
 	void cannotHitMorePinsThanPinsLeft() {
 		game.rollBall(4);
 		game.rollBall(7);
+		assertEquals(4, game.getScore());
+		assertEquals(1, game.getCurrentRoll());
+	}
+	
+	@Test
+	void canHitMorePinsIfFinalFrame() {
+		//Roll 4s for 9 frames
+		for (int i = 0; i < 18; i++) {
+			game.rollBall(4);
+		}
+		int currentRoll = game.getCurrentRoll();
+		int currentScore = game.getScore();
+		
+		System.out.println("currentRoll: " + currentRoll);
+		
+		game.rollBall(10);
+		game.rollBall(10);
+		
+		assertEquals(currentScore + 20, game.getScore());		
+		assertEquals(currentRoll + 2, game.getCurrentRoll());
+		
 	}
 	
 	// Roll 4s every time

@@ -87,7 +87,9 @@ public class BowlingGame {
 		if (rollNum == 1) {
 			displayScore();
 		}
+		
 		currentRoll++;
+
 		
 	}
 
@@ -101,11 +103,23 @@ public class BowlingGame {
 	public void rollBall(int numPinsHit) {
 
 		if (this.status != Status.GAME_OVER) {
+			
+			// Check if number of pins is valid
 			if (numPinsHit < 0 || numPinsHit > 10) {
 				// throw new Exception("Number of pins must be between 0 and 10");
+				// Just return for now
+				return;
 			}
-
+			
+			
 			Frame currentFrame = getCurrentFrame();
+			
+			// Check if number of pins is less than number of pins remaining
+			if(currentRoll < 19 && currentRoll % 2 == 1 && numPinsHit > (10 - currentFrame.getFirstRoll())) {
+				// throw new Exception("Number of pins cannot be more than number of pins remaining");
+				// Just return for now
+				return;
+			}
 
 			if (this.status == Status.BONUS) {
 				this.bonus = numPinsHit;
@@ -114,6 +128,7 @@ public class BowlingGame {
 				if (numPinsHit == 10 && currentRoll % 2 == 0 && getCurrentFrameNum() != 9) {
 					int[] strikeRolls = { 10, 0 };
 					currentFrame.updateBothRolls(strikeRolls);
+					// If it's a strike, there's no 2nd roll
 					currentRoll++;
 				} else {
 					currentFrame.updateOneRoll(numPinsHit, currentRoll % 2);
