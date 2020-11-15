@@ -15,8 +15,8 @@ class MainTest {
 	}
 	
 	@BeforeEach
-	void clearScore() {
-		game.clearScore();
+	void resetGame() {
+		game.clearGame();
 	}
 
 	@Test
@@ -27,7 +27,7 @@ class MainTest {
 	@Test
 	void canScorePoints() {
 		BowlingGame game = new BowlingGame();
-		game.rollBall(5);
+		game.rollBall(0, 5);
 		assertEquals(5, game.getScore());
 	}
 	
@@ -36,12 +36,13 @@ class MainTest {
 		int pins = 5;
 		rollFullGame(pins);
 		assertEquals(pins*NUM_TURNS*2, game.getScore());
-		
 	}
+	
+	
 	
 	void rollFullGame(int pins) {
 		for (int i=0; i< NUM_TURNS*2; i++) {
-			game.rollBall(pins);
+			game.rollBall(i, pins);
 		}
 	}
 	
